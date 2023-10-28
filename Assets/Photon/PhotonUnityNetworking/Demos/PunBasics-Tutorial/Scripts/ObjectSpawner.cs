@@ -5,8 +5,9 @@ using Photon.Pun;
 public class ObjectSpawner : MonoBehaviour
 {
     public GameObject objectToSpawn;
-    public Transform spawnPoint;
+    public Transform[] spawnPoints;
     public float spawnInterval = 5f;
+    public float objectLifetime = 10f;
 
     private float lastSpawnTime;
 
@@ -26,12 +27,32 @@ public class ObjectSpawner : MonoBehaviour
 
     private void SpawnObject()
     {
-        if (spawnPoint == null)
+        if (spawnPoints == null || spawnPoints.Length == 0)
         {
-            Debug.LogWarning("No spawn point defined.");
+            Debug.LogWarning("No spawn points defined.");
             return;
         }
 
-        Instantiate(objectToSpawn, spawnPoint.position, spawnPoint.rotation);
+        Transform randomSpawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+
+        if (objectToSpawn == null)
+        {
+            Debug.LogWarning("No object to spawn defined.");
+            return;
+        }
+
+        GameObject newObject = Instantiate(objectToSpawn, randomSpawnPoint.position, randomSpawnPoint.rotation);
+
+        StartCoroutine(DestroyObjectAfterLifetime(newObject));
+    }
+
+    private IEnumerator DestroyObjectAfterLifetime(GameObject obj)
+    {
+        yield return new WaitForSeconds(objectLifetime);
+
+        if (obj != null)
+        {
+            Destroy(obj);
+        }
     }
 }
