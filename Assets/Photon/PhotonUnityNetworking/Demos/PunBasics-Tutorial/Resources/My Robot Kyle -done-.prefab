@@ -406,7 +406,7 @@ GameObject:
   - component: {fileID: 11413802}
   - component: {fileID: 11449706}
   - component: {fileID: 11484610}
-  - component: {fileID: 8272871132903010596}
+  - component: {fileID: 3022485110493473949}
   m_Layer: 0
   m_Name: My Robot Kyle -done-
   m_TagString: Player
@@ -605,7 +605,7 @@ MonoBehaviour:
   centerOffset: {x: 0, y: 2, z: 0}
   followOnStart: 0
   smoothSpeed: 1
---- !u!114 &8272871132903010596
+--- !u!114 &3022485110493473949
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
