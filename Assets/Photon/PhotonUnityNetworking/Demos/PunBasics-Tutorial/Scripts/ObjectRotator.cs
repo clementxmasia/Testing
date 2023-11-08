@@ -8,6 +8,13 @@ public class ObjectRotator : MonoBehaviourPun, IPunObservable
 
     private bool isGreen = false; // Tracks if the object is green
 
+    private Renderer rend; // Reference to the Renderer component
+
+    private void Start()
+    {
+        rend = GetComponent<Renderer>(); // Get the Renderer component once during initialization
+    }
+
     void Update()
     {
         // Rotate the object around the specified axis at a constant speed
@@ -26,7 +33,16 @@ public class ObjectRotator : MonoBehaviourPun, IPunObservable
             {
                 // Change the color to green
                 isGreen = true;
-                GetComponent<Renderer>().material.color = Color.green;
+
+                if (rend != null)
+                {
+                    rend.material.color = Color.green;
+                }
+                else
+                {
+                    Debug.LogError("Renderer component not found on the object.");
+                }
+
                 photonView.RPC("SyncColor", RpcTarget.Others, isGreen);
             }
         }
@@ -36,9 +52,13 @@ public class ObjectRotator : MonoBehaviourPun, IPunObservable
     void SyncColor(bool green)
     {
         isGreen = green;
-        if (green)
+        if (rend != null)
         {
-            GetComponent<Renderer>().material.color = Color.green;
+            rend.material.color = isGreen ? Color.green : Color.white;
+        }
+        else
+        {
+            Debug.LogError("Renderer component not found on the object.");
         }
     }
 
@@ -60,7 +80,14 @@ public class ObjectRotator : MonoBehaviourPun, IPunObservable
             {
                 // Synchronize the color
                 isGreen = receivedIsGreen;
-                GetComponent<Renderer>().material.color = isGreen ? Color.green : Color.white;
+                if (rend != null)
+                {
+                    rend.material.color = isGreen ? Color.green : Color.white;
+                }
+                else
+                {
+                    Debug.LogError("Renderer component not found on the object.");
+                }
             }
         }
     }
